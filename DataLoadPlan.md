@@ -11,6 +11,34 @@
 
 All raw data lives under `data/raw/` on disk. It is **gitignored for large files** (Kaggle PDFs) and **LFS-tracked for parquet files**.
 
+**Absolute path on local machine**:
+```
+/Users/r0s0sbk/Documents/bruno/Nyay_ai/data/raw/
+```
+
+### Kaggle Data (Local Only — NOT in Git)
+
+These are too large for GitHub. Anyone joining the project runs `python scripts/download_datasets.py --source kaggle` to download them.
+
+| Dataset | Absolute Path | Size |
+|---------|---------------|------|
+| SC Judgments PDFs | `/Users/r0s0sbk/Documents/bruno/Nyay_ai/data/raw/judgments/supreme_court/kaggle_full/` | 5.4 GB |
+| ↳ Metadata CSV | `/Users/r0s0sbk/Documents/bruno/Nyay_ai/data/raw/judgments/supreme_court/kaggle_full/judgments.csv` | 8.2 MB |
+| ↳ 48,294 PDF files | `/Users/r0s0sbk/Documents/bruno/Nyay_ai/data/raw/judgments/supreme_court/kaggle_full/pdfs/` | 5.4 GB |
+| SC Judgments Text (1950-2025) | `/Users/r0s0sbk/Documents/bruno/Nyay_ai/data/raw/judgments/supreme_court/kaggle_1950_2024/` | 6.8 GB |
+| ↳ 26,689 text files in 77 year folders | `.../kaggle_1950_2024/supreme_court_judgments/{1950..2025}/` | — |
+| HC Cases Metadata | `/Users/r0s0sbk/Documents/bruno/Nyay_ai/data/raw/judgments/high_courts/kaggle_hc_cases/` | 84 KB |
+
+### Kaggle Credentials
+
+| Item | Location |
+|------|----------|
+| Kaggle JSON | `~/.kaggle/kaggle.json` (chmod 600) |
+| Username | Stored in `.env` as `KAGGLE_USERNAME` |
+| API Key | Stored in `.env` as `KAGGLE_KEY` |
+
+### Full Directory Tree
+
 ```
 data/raw/                                              TOTAL: ~12 GB
 │
