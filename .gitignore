@@ -1,12 +1,8 @@
-# Data (too large for git)
-data/raw/
+# Data — tracked via Git LFS
+# data/raw/ is now committed via LFS for parquet/csv/pdf files
 data/processed/
-*.pdf
-*.csv
-*.parquet
-*.arrow
 
-# Keep the PDF business plan
+# Keep the PDF business plan (also via LFS)
 !Nyay_AI_Business_Plan_2026.pdf
 
 # Python
