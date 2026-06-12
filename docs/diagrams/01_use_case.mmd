@@ -1,0 +1,79 @@
+graph TB
+    subgraph Actors
+        C1["👤 Citizen - Free"]
+        C2["👤 Citizen - Paid"]
+        L["⚖️ Lawyer"]
+        A["🔧 Admin"]
+        B2B["🏢 B2B Client"]
+        GOV["🏛️ Government"]
+    end
+
+    subgraph "Nyay.AI Platform"
+        subgraph "Core Features"
+            UC1[Ask Legal Question]
+            UC2[Get Rights Explanation]
+            UC3[Generate Legal Document]
+            UC4[Check Scheme Eligibility]
+            UC5[Track Case Status]
+            UC6[Connect with Lawyer]
+        end
+
+        subgraph "User Management"
+            UC7[Register / Login]
+            UC8[Manage Subscription]
+            UC9[View Query History]
+            UC10[Rate Lawyer]
+        end
+
+        subgraph "Lawyer Features"
+            UC11[Receive Referral with Brief]
+            UC12[Accept / Decline Referral]
+            UC13[View Client Case Summary]
+            UC14[Manage Profile and Ratings]
+        end
+
+        subgraph "Admin Features"
+            UC15[Monitor RAG Quality]
+            UC16[Review Flagged Responses]
+            UC17[Manage Legal Corpus]
+            UC18[View Analytics Dashboard]
+        end
+
+        subgraph "B2B / B2G"
+            UC19[Access API Endpoint]
+            UC20[Embed Chat Widget]
+            UC21[Bulk Query Processing]
+        end
+    end
+
+    C1 --> UC1
+    C1 --> UC2
+    C1 --> UC4
+    C1 --> UC5
+    C1 --> UC6
+    C1 --> UC7
+
+    C2 --> UC1
+    C2 --> UC2
+    C2 --> UC3
+    C2 --> UC4
+    C2 --> UC5
+    C2 --> UC6
+    C2 --> UC8
+    C2 --> UC9
+    C2 --> UC10
+
+    L --> UC11
+    L --> UC12
+    L --> UC13
+    L --> UC14
+
+    A --> UC15
+    A --> UC16
+    A --> UC17
+    A --> UC18
+
+    B2B --> UC19
+    B2B --> UC20
+    GOV --> UC19
+    GOV --> UC21

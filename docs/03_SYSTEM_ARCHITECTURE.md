@@ -2,6 +2,10 @@
 
 ## 1. High-Level Architecture
 
+![System Architecture](diagrams/06_system_architecture.png)
+
+<details><summary>Mermaid source</summary>
+
 ```mermaid
 graph TB
     subgraph "Client Layer"
@@ -92,9 +96,15 @@ graph TB
     LF --> DASH
 ```
 
+</details>
+
 ---
 
 ## 2. RAG Pipeline Detail
+
+![RAG Pipeline](diagrams/07_rag_pipeline.png)
+
+<details><summary>Mermaid source</summary>
 
 ```mermaid
 graph LR
@@ -133,9 +143,13 @@ graph LR
     end
 ```
 
+</details>
+
 ---
 
 ## 3. Infrastructure Layout (AWS ap-south-1)
+
+<details><summary>Mermaid source</summary>
 
 ```mermaid
 graph TB
@@ -193,9 +207,15 @@ graph TB
     LAMBDA --> S3_CORPUS
 ```
 
+</details>
+
 ---
 
 ## 4. Data Model (Core Entities)
+
+![Data Model](diagrams/08_data_model.png)
+
+<details><summary>Mermaid source</summary>
 
 ```mermaid
 erDiagram
@@ -319,6 +339,8 @@ erDiagram
     CONVERSATIONS ||--o{ DOCUMENTS : produces
     CONVERSATIONS ||--o{ REFERRALS : triggers
 ```
+
+</details>
 
 ---
 

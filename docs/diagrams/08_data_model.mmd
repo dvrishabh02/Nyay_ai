@@ -1,0 +1,102 @@
+erDiagram
+    USERS {
+        uuid id PK
+        string phone_number UK
+        string email
+        string name
+        string language_pref
+        string state
+        enum plan
+        int daily_query_count
+        timestamp created_at
+    }
+
+    CONVERSATIONS {
+        uuid id PK
+        uuid user_id FK
+        string channel
+        string language
+        timestamp started_at
+        timestamp last_message_at
+    }
+
+    MESSAGES {
+        uuid id PK
+        uuid conversation_id FK
+        enum role
+        text content
+        string language
+        float confidence_score
+        int tokens_used
+        float cost_usd
+        int latency_ms
+        json citations
+        timestamp created_at
+    }
+
+    DOCUMENTS {
+        uuid id PK
+        uuid user_id FK
+        uuid conversation_id FK
+        string doc_type
+        string status
+        int price_inr
+        string s3_url
+        timestamp created_at
+    }
+
+    LAWYER_PROFILES {
+        uuid id PK
+        string name
+        string bar_council_id UK
+        string phone
+        string city
+        string state
+        json specializations
+        float rating
+        int total_referrals
+        boolean is_verified
+    }
+
+    REFERRALS {
+        uuid id PK
+        uuid user_id FK
+        uuid lawyer_id FK
+        uuid conversation_id FK
+        text case_brief
+        string domain
+        enum status
+        int fee_inr
+        float user_rating
+    }
+
+    CASE_TRACKING {
+        uuid id PK
+        uuid user_id FK
+        string cnr_number UK
+        string court
+        string case_status
+        date next_hearing
+        boolean notify_enabled
+    }
+
+    SUBSCRIPTIONS {
+        uuid id PK
+        uuid user_id FK
+        enum plan
+        string razorpay_sub_id
+        int price_inr
+        date start_date
+        date end_date
+        enum status
+    }
+
+    USERS ||--o{ CONVERSATIONS : has
+    CONVERSATIONS ||--o{ MESSAGES : contains
+    USERS ||--o{ DOCUMENTS : generates
+    USERS ||--o{ REFERRALS : requests
+    LAWYER_PROFILES ||--o{ REFERRALS : receives
+    USERS ||--o{ CASE_TRACKING : tracks
+    USERS ||--o{ SUBSCRIPTIONS : subscribes
+    CONVERSATIONS ||--o{ DOCUMENTS : produces
+    CONVERSATIONS ||--o{ REFERRALS : triggers

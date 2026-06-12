@@ -1,0 +1,48 @@
+sequenceDiagram
+    actor User as Citizen
+    actor Lawyer as Lawyer
+    participant UI as WhatsApp / Web UI
+    participant API as FastAPI Backend
+    participant LLM as Claude Sonnet
+    participant DB as Supabase PostgreSQL
+    participant NOTIFY as Notification Service
+    participant PAY as Razorpay
+
+    User->>UI: I need a lawyer for this
+    UI->>API: POST /api/lawyer/connect
+
+    API->>LLM: Generate structured case brief
+    LLM-->>API: Case type facts laws documents urgency location
+
+    API->>DB: Query verified lawyers by domain city rating
+    DB-->>API: Matched lawyers ranked
+
+    API->>UI: Show top 3 lawyer profiles
+    UI->>User: Lawyer cards with details
+
+    User->>UI: Selects Advocate Sharma
+    UI->>API: POST /api/lawyer/refer
+
+    API->>DB: Create referral record status pending
+
+    API->>NOTIFY: Send referral to lawyer
+    NOTIFY->>Lawyer: New referral - Tenant dispute in Delhi
+
+    Lawyer->>API: GET /api/lawyer/referral/id
+    API-->>Lawyer: Full case brief + documents
+
+    alt Lawyer accepts
+        Lawyer->>API: POST /api/lawyer/referral/id/accept
+        API->>DB: Update referral status accepted
+        API->>NOTIFY: Notify citizen
+        NOTIFY->>User: Advocate Sharma accepted
+        API->>PAY: Charge lawyer referral fee Rs 500-2500
+        PAY-->>API: Payment confirmed
+    else Lawyer declines
+        Lawyer->>API: POST /api/lawyer/referral/id/decline
+        API->>DB: Update status declined
+        API->>API: Auto-refer to next lawyer
+    end
+
+    User->>API: POST /api/lawyer/rate rating 4.5
+    API->>DB: Update lawyer rating

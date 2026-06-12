@@ -1,0 +1,51 @@
+sequenceDiagram
+    actor User as Citizen WhatsApp
+    participant WA as WhatsApp API
+    participant API as FastAPI Backend
+    participant Auth as Supabase Auth
+    participant Trans as Sarvam AI Translation
+    participant QU as Query Understanding
+    participant VDB as Qdrant Vector DB
+    participant Rerank as Cohere Reranker
+    participant LLM as Claude Sonnet
+    participant DB as Supabase PostgreSQL
+    participant LF as Langfuse
+
+    User->>WA: Sends message in Hindi
+    WA->>API: Webhook POST /webhook/whatsapp
+    API->>Auth: Verify user phone number
+    Auth-->>API: User profile + quota
+
+    API->>API: Check free quota 10/day
+    alt Quota exceeded
+        API->>WA: Daily limit reached
+        WA->>User: Subscription prompt
+    end
+
+    API->>Trans: Detect language + translate
+    Trans-->>API: English translation
+
+    API->>QU: Extract domain jurisdiction acts urgency
+    QU-->>API: Classification result
+
+    API->>VDB: Hybrid search dense + sparse with metadata filter
+    VDB-->>API: Top 20 candidate chunks
+
+    API->>Rerank: Rerank 20 chunks
+    Rerank-->>API: Top 8 reranked chunks
+
+    API->>API: Assemble context with metadata and citations
+
+    API->>LLM: System prompt + context + query
+    LLM-->>API: Grounded answer + confidence 0.91
+
+    API->>API: Inject citations + disclaimer
+
+    API->>Trans: Translate response to Hindi
+    Trans-->>API: Hindi response
+
+    API->>DB: Log query response tokens latency
+    API->>LF: Track cost latency quality
+
+    API->>WA: Send formatted response
+    WA->>User: Legal info in Hindi with citations

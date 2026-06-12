@@ -15,6 +15,10 @@
 
 ## 2. Use Case Diagram
 
+![Use Case Diagram](diagrams/01_use_case.png)
+
+<details><summary>Mermaid source</summary>
+
 ```mermaid
 graph TB
     subgraph Actors
@@ -97,9 +101,15 @@ graph TB
     GOV --> UC21
 ```
 
+</details>
+
 ---
 
 ## 3. Application Flow — Citizen Journey
+
+![Citizen Flow](diagrams/02_citizen_flow.png)
+
+<details><summary>Mermaid source</summary>
 
 ```mermaid
 flowchart TD
@@ -178,6 +188,8 @@ flowchart TD
     LIMIT --> END
     ESCALATE --> END
 ```
+
+</details>
 
 ---
 

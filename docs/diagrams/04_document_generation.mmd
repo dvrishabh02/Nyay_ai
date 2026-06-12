@@ -1,0 +1,43 @@
+sequenceDiagram
+    actor User as Citizen
+    participant UI as WhatsApp / Web UI
+    participant API as FastAPI Backend
+    participant LLM as Claude Sonnet
+    participant TPL as Template Engine
+    participant PAY as Razorpay
+    participant DB as Supabase PostgreSQL
+    participant S3 as AWS S3
+
+    User->>UI: Generate a consumer complaint
+    UI->>API: POST /api/document/generate
+
+    API->>API: Extract context from conversation history
+
+    API->>LLM: Generate document fields from context
+    LLM-->>API: Complainant respondent facts sections
+
+    API->>TPL: Select template + fill fields
+    TPL-->>API: Draft document Markdown
+
+    API->>UI: Preview document
+    UI->>User: Review and edit draft
+    User->>UI: Approves document
+
+    alt Paid document Rs 49-499
+        API->>PAY: Create Razorpay order
+        PAY-->>API: Order ID + payment link
+        API->>UI: Payment prompt
+        UI->>User: Razorpay payment page
+        User->>PAY: Completes payment UPI or Card
+        PAY->>API: Webhook payment success
+    end
+
+    API->>TPL: Render final PDF
+    TPL-->>API: PDF document
+
+    API->>S3: Store PDF
+    S3-->>API: Download URL
+
+    API->>DB: Log doc type user payment
+    API->>UI: Download link
+    UI->>User: Document ready for download

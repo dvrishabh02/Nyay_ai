@@ -1,0 +1,34 @@
+graph LR
+    subgraph "Input Processing"
+        Q[User Query] --> LD[Language Detect]
+        LD --> TR[Translate to English]
+        TR --> QE[Query Expansion + Entity Extraction]
+    end
+
+    subgraph "Retrieval"
+        QE --> DE[Dense Embedding multilingual-e5-large]
+        QE --> SP[Sparse Tokens BM42]
+        DE --> HY[Hybrid Search RRF Fusion]
+        SP --> HY
+        HY --> MF[Metadata Filtering]
+        MF --> TOP[Top 20 Candidates]
+    end
+
+    subgraph "Reranking"
+        TOP --> CR[Cohere Reranker]
+        CR --> T8[Top 8 Chunks]
+    end
+
+    subgraph "Generation"
+        T8 --> CA[Context Assembly]
+        CA --> SYS[System Prompt Anti-hallucination]
+        SYS --> LLM[Claude Sonnet 200K context]
+        LLM --> CI[Citation Injection]
+        CI --> CS[Confidence Scoring]
+    end
+
+    subgraph "Output"
+        CS --> TRO[Translate to User Language]
+        TRO --> DIS[Add Disclaimer]
+        DIS --> OUT[Final Response]
+    end

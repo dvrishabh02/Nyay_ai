@@ -4,6 +4,10 @@
 
 The primary interaction — a citizen asks a legal question via WhatsApp.
 
+![RAG Sequence](diagrams/03_rag_sequence.png)
+
+<details><summary>Mermaid source</summary>
+
 ```mermaid
 sequenceDiagram
     actor User as 👤 Citizen (WhatsApp)
@@ -58,11 +62,17 @@ sequenceDiagram
     WA->>User: Legal information in Hindi<br/>with citations + disclaimer<br/>+ follow-up options
 ```
 
+</details>
+
 ---
 
 ## 2. Document Generation Flow
 
 When a citizen needs a legal document (e.g., consumer complaint, RTI, legal notice).
+
+![Document Generation](diagrams/04_document_generation.png)
+
+<details><summary>Mermaid source</summary>
 
 ```mermaid
 sequenceDiagram
@@ -111,11 +121,17 @@ sequenceDiagram
     UI->>User: "Your document is ready. Download here."
 ```
 
+</details>
+
 ---
 
 ## 3. Lawyer Connect & Referral Flow
 
 When the system connects a citizen with a verified advocate.
+
+![Lawyer Referral](diagrams/05_lawyer_referral.png)
+
+<details><summary>Mermaid source</summary>
 
 ```mermaid
 sequenceDiagram

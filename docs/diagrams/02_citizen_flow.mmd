@@ -1,0 +1,49 @@
+flowchart TD
+    START(["Citizen has a legal problem"]) --> ENTRY{"How do they reach Nyay.AI?"}
+
+    ENTRY -->|WhatsApp| WA[Sends message to Nyay.AI WhatsApp number]
+    ENTRY -->|Web| WEB[Opens nyay.ai website]
+    ENTRY -->|Referral| REF[Gets number from friend / community]
+
+    WA --> GREET[Bot sends greeting + language selection]
+    WEB --> WEBLOGIN[Login / Continue as guest]
+    REF --> WA
+
+    GREET --> LANG[User selects language]
+    WEBLOGIN --> LANG
+
+    LANG --> DESCRIBE[User describes problem in plain language]
+    DESCRIBE --> CLASSIFY[System classifies: domain + jurisdiction + urgency]
+
+    CLASSIFY --> QUOTA{Free quota remaining?}
+    QUOTA -->|No| PAYWALL[Show subscription plans]
+    PAYWALL --> PAY{User pays?}
+    PAY -->|Yes| PROCESS
+    PAY -->|No| LIMIT[Show limited response + upgrade prompt]
+
+    QUOTA -->|Yes| PROCESS[RAG Pipeline processes query]
+
+    PROCESS --> CONFIDENCE{Confidence score?}
+
+    CONFIDENCE -->|"HIGH > 0.85"| FULL[Full answer with citations]
+    CONFIDENCE -->|"MEDIUM 0.6-0.85"| CAVEAT[Answer with caveats]
+    CONFIDENCE -->|"LOW < 0.6"| DECLINE[Decline to answer]
+    CONFIDENCE -->|EMERGENCY| ESCALATE[Immediate lawyer escalation]
+
+    FULL --> FOLLOWUP{User needs more?}
+    CAVEAT --> FOLLOWUP
+
+    FOLLOWUP -->|Generate Document| DOC[Document Generator]
+    FOLLOWUP -->|Check Scheme| SCHEME[Scheme Eligibility Check]
+    FOLLOWUP -->|Track Case| TRACK[Case Status Tracker]
+    FOLLOWUP -->|Talk to Lawyer| LAWYER[Lawyer Connect]
+    FOLLOWUP -->|Ask Another Question| DESCRIBE
+    FOLLOWUP -->|Done| END(["Session ends"])
+
+    DECLINE --> LAWYER
+    ESCALATE --> END
+    DOC --> END
+    SCHEME --> END
+    TRACK --> END
+    LAWYER --> END
+    LIMIT --> END

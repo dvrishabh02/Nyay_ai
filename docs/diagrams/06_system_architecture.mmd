@@ -1,0 +1,80 @@
+graph TB
+    subgraph "Client Layer"
+        WA["📱 WhatsApp"]
+        WEB["🌐 Web App Next.js"]
+        VOICE["🎤 Voice Input"]
+        B2BAPI["🔌 B2B API"]
+    end
+
+    subgraph "API Gateway"
+        CDN["☁️ CloudFront CDN"]
+        GW["🚪 FastAPI Gateway"]
+    end
+
+    subgraph "Auth and User Mgmt"
+        AUTH["🔐 Supabase Auth"]
+        QUOTA["📊 Quota Manager"]
+    end
+
+    subgraph "Core AI Pipeline"
+        LANG["🌍 Language Detection + Translation"]
+        QU["🧠 Query Understanding"]
+        HYBRID["🔍 Hybrid Retrieval BM25 + Dense"]
+        RERANK["📊 Cohere Reranker"]
+        CTX["📋 Context Assembly"]
+        GEN["🤖 Claude Sonnet LLM"]
+        CONF["⚖️ Confidence Scoring"]
+    end
+
+    subgraph "Data Layer"
+        VDB[("🗄️ Qdrant Cloud")]
+        DB[("🐘 Supabase PostgreSQL")]
+        S3[("📦 AWS S3")]
+    end
+
+    subgraph "Data Ingestion"
+        SCRAPERS["🕷️ Scrapy Spiders"]
+        PARSER["📄 Document Parser"]
+        CHUNKER["✂️ Chunking Pipeline"]
+        EMBEDDER["🔢 Embedding Generator"]
+    end
+
+    subgraph "Supporting Services"
+        PAY["💳 Razorpay"]
+        TPL["📝 Template Engine"]
+        SCHEME["🏛️ Scheme Engine"]
+        ECOURT["⚖️ eCourts API"]
+        LAWYER["👨‍⚖️ Lawyer Marketplace"]
+    end
+
+    subgraph "Monitoring"
+        LF["📈 Langfuse"]
+        SENTRY["🐛 Sentry"]
+    end
+
+    WA --> GW
+    WEB --> CDN --> GW
+    VOICE --> GW
+    B2BAPI --> GW
+
+    GW --> AUTH --> QUOTA
+    QUOTA --> LANG --> QU
+
+    QU --> HYBRID --> VDB
+    HYBRID --> RERANK --> CTX --> GEN
+    GEN --> CONF
+
+    CONF --> GW
+    CONF --> LAWYER
+
+    GW --> PAY
+    GW --> TPL --> S3
+    GW --> SCHEME
+    GW --> ECOURT
+    GW --> LAWYER
+
+    SCRAPERS --> PARSER --> CHUNKER --> EMBEDDER --> VDB
+
+    GW --> DB
+    GW --> LF
+    GW --> SENTRY
