@@ -114,7 +114,7 @@ For 2 people, we simplify aggressively:
 |-------|--------------|-----|
 | **Backend** | FastAPI (Python) | One person handles this |
 | **Frontend** | Next.js + Tailwind (simple chat UI) | Other person handles this |
-| **Vector DB** | Qdrant Cloud (free tier: 1 GB) | Free, hybrid search, no self-hosting |
+| **Vector DB** | FAISS in-memory + disk persistence | Zero cost, <10ms retrieval, no external dependency. Index saved to disk, loaded on startup (~10s). Migrate to Qdrant Cloud later if needed. |
 | **LLM** | Claude Sonnet (Anthropic API) | Best instruction following, citation quality |
 | **Indic Language** | Sarvam AI API (Hindi only for now) | Focus on Hindi quality first |
 | **Embeddings** | multilingual-e5-large (self-hosted) | Free, excellent Hindi support |
@@ -126,10 +126,19 @@ For 2 people, we simplify aggressively:
 | **Monitoring** | Langfuse (free tier) | LLM cost tracking from day 1 |
 
 **What we're NOT setting up for launch:**
+- ❌ Qdrant Cloud / any external vector DB (FAISS in-memory is faster and free)
 - ❌ AWS ECS Fargate (overkill for 2 people, use Railway/Render)
 - ❌ Redis cache (optimize later)
 - ❌ Background workers / cron scrapers (manual updates for now)
 - ❌ CloudFront CDN (Vercel handles this for Next.js)
+
+**In-Memory RAG Architecture:**
+- FAISS index (~200 MB for dense vectors) loaded into RAM on server startup
+- BM25 index (rank_bm25 library) for sparse/keyword search — also in-memory
+- Combined via Reciprocal Rank Fusion (RRF) for hybrid search
+- Index files saved to disk as `.faiss` + `.pkl` — version controlled or stored in S3
+- Total RAM needed: ~500 MB (fits in Railway's 512 MB free tier or 1 GB paid)
+- Retrieval latency: <10ms (vs ~50-100ms with Qdrant Cloud)
 
 ---
 
@@ -139,11 +148,11 @@ For 2 people, we simplify aggressively:
 
 | Week | Tasks |
 |------|-------|
-| **Week 1** | Set up Qdrant Cloud. Build chunking pipeline for downloaded datasets. Generate embeddings. Load into Qdrant with metadata. |
+| **Week 1** | Build chunking pipeline for downloaded datasets. Generate embeddings with multilingual-e5-large. Build FAISS index + BM25 index in-memory. Save to disk. |
 | **Week 2** | Build RAG chain: query understanding → hybrid retrieval → reranking → Claude generation. Anti-hallucination prompt. Confidence scoring. |
 | **Week 3** | Build FastAPI backend: `/query`, `/document/generate`, `/scheme/check` endpoints. Supabase auth + quota. Hindi translation via Sarvam. |
 | **Week 4** | WhatsApp Business API integration. Webhook handler. Conversation flow. Testing + prompt tuning. |
-| **Week 5** | Scrape remaining data (NCDRC orders, RTI, Delhi HC top judgments). Add to Qdrant. |
+| **Week 5** | Scrape remaining data (NCDRC orders, RTI, Delhi HC top judgments). Rebuild FAISS + BM25 index with new data. |
 | **Week 6** | Bug fixes. Prompt optimization. Launch prep. |
 
 ### Person B — Frontend + Templates + Growth
@@ -159,7 +168,7 @@ For 2 people, we simplify aggressively:
 
 ### Shared Tasks (Both)
 
-- Week 1: Sign up for all API keys (Anthropic, Sarvam, Qdrant, Supabase, Razorpay, Meta WhatsApp)
+- Week 1: Sign up for all API keys (Anthropic, Sarvam, Supabase, Razorpay, Meta WhatsApp)
 - Week 3: Write system prompt together (legal accuracy + anti-hallucination)
 - Week 5: Test 100 real legal queries across domains. Measure quality.
 - Week 6: Soft launch to 100 beta users. Public launch.
@@ -228,11 +237,11 @@ Week 6: Launch
 
 | Service | Free Tier | Paid Estimate (1K users/day) |
 |---------|-----------|------------------------------|
-| Qdrant Cloud | 1 GB free | $0 (within free tier for 1 GB) |
+| FAISS (in-memory) | ₹0 (runs on same server) | ₹0 (no external service) |
 | Anthropic (Claude) | — | ~$90/mo (10K queries × $0.003/query avg) |
 | Sarvam AI | — | ~$30/mo (20% Hindi queries) |
 | Supabase | Free tier | $0 (within free tier) |
-| Railway/Render | Free tier / $5 | ~$20/mo |
+| Railway/Render | Free tier / $5 | ~$25/mo (need 1 GB RAM for FAISS index) |
 | Vercel (Next.js) | Free tier | $0 |
 | WhatsApp Business API | Free to receive | ~₹5,000/mo (10K sent messages × ₹0.50) |
 | Langfuse | Free tier | $0 |
@@ -240,6 +249,8 @@ Week 6: Launch
 | **TOTAL** | | **~₹15,000/mo (~$180)** |
 
 This is fundable from personal savings for 6+ months. No external funding needed for MVP validation.
+
+**Note on in-memory approach:** FAISS index loads on server startup (~10s). If server restarts, index reloads from disk automatically. No data loss. When we outgrow 1 GB RAM (>100K chunks), we migrate to Qdrant Cloud — same embeddings, just swap the storage backend.
 
 ---
 
