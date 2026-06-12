@@ -48,6 +48,36 @@ HUGGINGFACE_DATASETS = [
         "save_dir": DATA_DIR / "judgments" / "hf_injudgements",
         "description": "Categorized Indian judgments by case type (tax, criminal, etc.)",
     },
+    {
+        "name": "Constitution of India (Full Text)",
+        "repo": "nisaar/Constitution_of_India",
+        "save_dir": DATA_DIR / "legislation" / "hf_constitution",
+        "description": "Full text of the Indian Constitution — articles, schedules, amendments",
+    },
+    {
+        "name": "Constitution QA Instruction Set (3300 pairs)",
+        "repo": "nisaar/Articles_Constitution_3300_Instruction_Set",
+        "save_dir": DATA_DIR / "legislation" / "hf_constitution_qa",
+        "description": "3,300 question-answer pairs on Indian Constitution articles",
+    },
+    {
+        "name": "Indian Law Dataset (Comprehensive)",
+        "repo": "viber1/indian-law-dataset",
+        "save_dir": DATA_DIR / "legislation" / "hf_indian_law",
+        "description": "Comprehensive Indian law dataset — acts, sections, explanations",
+    },
+    {
+        "name": "IL-TUR (Indian Legal Text Understanding & Reasoning)",
+        "repo": "Exploration-Lab/IL-TUR",
+        "save_dir": DATA_DIR / "judgments" / "hf_iltur",
+        "description": "Multi-task Indian legal NLP benchmark — bail prediction, judgment, summarization",
+    },
+    {
+        "name": "Indian Constitution + IPC Instruct Dataset",
+        "repo": "RaagulQB/Indian-Constitution-And-IPC-Instruct",
+        "save_dir": DATA_DIR / "legislation" / "hf_constitution_ipc_instruct",
+        "description": "Instruction-tuned QA pairs on Constitution + IPC sections",
+    },
 ]
 
 # ──────────────────────────────────────────────
@@ -65,6 +95,12 @@ KAGGLE_DATASETS = [
         "dataset": "adarshsingh0903/legal-dataset-sc-judgments-india-19502024",
         "save_dir": DATA_DIR / "judgments" / "supreme_court" / "kaggle_1950_2024",
         "description": "Comprehensive SC judgments from 1950 to 2024",
+    },
+    {
+        "name": "High Court Cases in India",
+        "dataset": "saurabhshahane/high-court-cases-in-india",
+        "save_dir": DATA_DIR / "judgments" / "high_courts" / "kaggle_hc_cases",
+        "description": "High Court cases across India with case details and outcomes",
     },
 ]
 
