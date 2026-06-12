@@ -1,0 +1,42 @@
+# ── Data Collection & Scraping ──
+scrapy>=2.11
+playwright>=1.40
+requests>=2.31
+beautifulsoup4>=4.12
+lxml>=5.1
+
+# ── PDF & Document Parsing ──
+PyMuPDF>=1.23
+unstructured[pdf]>=0.12
+pytesseract>=0.3.10
+PyPDF2>=3.0
+
+# ── Datasets ──
+datasets>=2.16        # HuggingFace datasets
+kaggle>=1.6           # Kaggle API
+
+# ── Embeddings & Vector DB ──
+sentence-transformers>=2.3
+qdrant-client>=1.7
+torch>=2.1
+
+# ── RAG Orchestration ──
+langchain>=0.1
+langchain-community>=0.0.10
+llama-index>=0.10
+anthropic>=0.18       # Claude API
+
+# ── Backend ──
+fastapi>=0.109
+uvicorn>=0.27
+pydantic>=2.5
+
+# ── Database ──
+supabase>=2.3
+
+# ── Utilities ──
+python-dotenv>=1.0
+tqdm>=4.66
+schedule>=1.2
+loguru>=0.7
+pandas>=2.1

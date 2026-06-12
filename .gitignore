@@ -1,0 +1,43 @@
+# Data (too large for git)
+data/raw/
+data/processed/
+*.pdf
+*.csv
+*.parquet
+*.arrow
+
+# Keep the PDF business plan
+!Nyay_AI_Business_Plan_2026.pdf
+
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+*.egg
+venv/
+.venv/
+
+# Environment
+.env
+.env.local
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Temp
+tmp/
+temp/
