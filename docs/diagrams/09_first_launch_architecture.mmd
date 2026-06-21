@@ -1,0 +1,66 @@
+graph TB
+    subgraph "Client Layer"
+        WA["📱 WhatsApp<br/>Meta Cloud API"]
+        WEB["🌐 Next.js Web App<br/>(Vercel — Free)<br/>Chat UI + Doc Gen + Scheme Checker"]
+    end
+
+    subgraph "Backend — FastAPI (Railway/Render)"
+        GW["🚪 FastAPI Server"]
+
+        subgraph "Middleware"
+            AUTH["🔐 Supabase Auth<br/>JWT + Phone OTP"]
+            QUOTA["📊 Quota Manager<br/>10 free/day"]
+        end
+
+        subgraph "API Endpoints"
+            EP1["POST /query<br/>Legal Q&A"]
+            EP2["POST /document/generate<br/>10 Templates ₹49-199"]
+            EP3["POST /scheme/check<br/>100 Schemes"]
+            EP4["POST /whatsapp/webhook"]
+        end
+
+        subgraph "In-Memory RAG Engine"
+            direction LR
+            FAISS["FAISS Index<br/>~200 MB<br/>Dense vectors<br/>1024-dim"]
+            BM25["BM25 Index<br/>rank_bm25<br/>Keyword search"]
+            RRF["Hybrid Search<br/>RRF Fusion<br/>→ Top-20 → Rerank → Top-8"]
+        end
+    end
+
+    subgraph "External Services"
+        CLAUDE["🤖 Claude Sonnet<br/>Generation<br/>Temp=0"]
+        SARVAM["🌍 Sarvam AI<br/>Hindi ↔ English"]
+        SUPA["🐘 Supabase<br/>Auth + PostgreSQL<br/>(Free tier)"]
+        RAZOR["💳 Razorpay<br/>UPI + Cards"]
+        LANGFUSE["📈 Langfuse<br/>LLM Monitoring<br/>(Free tier)"]
+    end
+
+    subgraph "Data (Offline Pipeline)"
+        RAW["📁 Raw Data<br/>12 GB on disk<br/>HF Parquets + Kaggle"]
+        PIPE["⚙️ Build Pipeline<br/>Parse → Clean → Chunk<br/>→ Embed → Save"]
+        FILES["💾 Index Files<br/>index.faiss<br/>metadata.pkl<br/>bm25.pkl<br/>~450 MB"]
+    end
+
+    WA -->|Webhook| EP4
+    WEB -->|HTTPS| GW
+    GW --> AUTH --> QUOTA
+    QUOTA --> EP1
+    QUOTA --> EP2
+    QUOTA --> EP3
+
+    EP1 --> FAISS
+    EP1 --> BM25
+    FAISS --> RRF
+    BM25 --> RRF
+    RRF --> CLAUDE
+
+    EP1 --> SARVAM
+    EP2 --> RAZOR
+    EP4 --> EP1
+
+    GW --> SUPA
+    GW --> LANGFUSE
+
+    RAW --> PIPE --> FILES
+    FILES -.->|Loaded on startup| FAISS
+    FILES -.->|Loaded on startup| BM25

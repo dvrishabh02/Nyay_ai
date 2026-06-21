@@ -1,0 +1,43 @@
+{
+  "built_at": "2026-06-21T13:03:51.129564+00:00",
+  "duration_seconds": 1050.4,
+  "total_chunks": 35858,
+  "sources_processed": [
+    "sc_chunked",
+    "legal_chunks",
+    "central_acts",
+    "ap_acts",
+    "arunachal_acts",
+    "andaman_acts"
+  ],
+  "chunks_per_source": {
+    "sc_chunked": 3222,
+    "legal_chunks": 606,
+    "central_acts": 21174,
+    "ap_acts": 3303,
+    "arunachal_acts": 5444,
+    "andaman_acts": 2109
+  },
+  "chunks_per_domain": {
+    "criminal": 6490,
+    "rti": 2963,
+    "property": 15398,
+    "general": 3166,
+    "cheque_bounce": 100,
+    "constitutional": 945,
+    "labour": 3416,
+    "tax": 722,
+    "consumer": 1459,
+    "family": 1011,
+    "motor_accident": 188
+  },
+  "embedding_model": "intfloat/e5-base-v2",
+  "embedding_dim": 768,
+  "chunk_size_tokens": 700,
+  "chunk_overlap_tokens": 105,
+  "index_files": {
+    "index.faiss": "105.1 MB",
+    "bm25.pkl": "84.7 MB",
+    "metadata.pkl": "106.0 MB"
+  }
+}

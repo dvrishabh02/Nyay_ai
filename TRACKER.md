@@ -1,6 +1,6 @@
 # Nyay.AI — Phase 1 Progress Tracker
 
-> Last updated: 13 Jun 2026, 2:15 AM IST
+> Last updated: 21 Jun 2026, 6:00 PM IST
 
 ---
 
@@ -115,14 +115,17 @@
 
 | Task | Status | Notes |
 |------|--------|-------|
-| PDF parser (PyMuPDF / Unstructured) | ⬜ Not started | For Kaggle SC judgment PDFs |
-| Text file reader | ⬜ Not started | For Kaggle SC judgment text files |
-| Chunking pipeline (700 tok, 15% overlap) | ⬜ Not started | Section-boundary respecting |
-| Metadata enrichment (doc_type, court, domain, year, etc.) | ⬜ Not started | |
-| Embedding generation (multilingual-e5-large) | ⬜ Not started | |
-| FAISS index build (in-memory + disk save) | ⬜ Not started | Dense vectors, ~200 MB |
-| BM25 sparse index (rank_bm25) | ⬜ Not started | Keyword search, in-memory |
-| Hybrid search (RRF fusion) | ⬜ Not started | Combine dense + sparse |
+| PDF parser (PyMuPDF / Unstructured) | ⏸️ Deferred | Kaggle PDFs parked for post-launch |
+| Text file reader | ⏸️ Deferred | Kaggle files are PDFs, not text |
+| Parquet parser | ✅ Done | `ingestion/parsers/parquet_parser.py` — auto-detects text columns |
+| Chunking pipeline (700 tok, 15% overlap) | ✅ Done | `ingestion/chunkers/legal_chunker.py` — section-boundary respecting |
+| Quality filters (dedup, length, empty) | ✅ Done | `ingestion/quality/filters.py` — SHA-256 dedup |
+| Metadata enrichment (doc_type, court, domain) | ✅ Done | `ingestion/enrichers/metadata.py` — keyword-based domain classifier |
+| Embedding generation (e5-base-v2) | ✅ Done | `ingestion/embedders/e5_embedder.py` — 768-dim, English-only |
+| FAISS index build (in-memory + disk save) | ✅ Done | `ingestion/indexers/faiss_builder.py` — IndexFlatIP |
+| BM25 sparse index (rank_bm25) | ✅ Done | `ingestion/indexers/bm25_builder.py` — keyword search |
+| Build pipeline script | ✅ Done | `scripts/build_index.py --all` — runs full pipeline |
+| Hybrid search (RRF fusion) | ⬜ Not started | Combine dense + sparse at query time |
 | Retrieval quality testing (100 test queries) | ⬜ Not started | Target: Recall@5 > 0.75 |
 
 ---
@@ -130,17 +133,18 @@
 ## Next Steps (In Order)
 
 ### Immediate Next Session
-1. **Build chunking pipeline** — process downloaded HF datasets + top 5K SC judgments → 700-token chunks with metadata
-2. **Generate embeddings** — multilingual-e5-large on all chunks
-3. **Build FAISS index** — dense vectors + BM25 index, save to disk
-4. **Build RAG chain** — query → hybrid retrieval → Claude generation
+1. ~~Build chunking pipeline~~ ✅ Done
+2. ~~Generate embeddings~~ ✅ Done (e5-base-v2, English only)
+3. ~~Build FAISS index~~ ✅ Done
+4. **Run `python scripts/build_index.py --all`** — execute the pipeline on actual data
+5. **Build RAG chain** — query → hybrid retrieval (RRF) → Claude generation
 
 ### After That
-5. Build FastAPI backend (`/query`, `/document/generate`, `/scheme/check`)
-6. Build Next.js chat UI (Person B)
-7. WhatsApp Business API integration
-8. Build scrapers for remaining data (NCDRC, RTI, Delhi HC)
-9. Test 100 real queries, tune prompts, beta launch
+6. Build FastAPI backend (`/query`, `/document/generate`, `/scheme/check`)
+7. Build Next.js chat UI (Person B)
+8. WhatsApp Business API integration
+9. Build scrapers for remaining data (NCDRC, RTI, Delhi HC)
+10. Test 100 real queries, tune prompts, beta launch
 
 See `LaunchPlan.md` for full 6-week timeline and `DataLoadPlan.md` for data indexing strategy.
 
@@ -153,5 +157,5 @@ See `LaunchPlan.md` for full 6-week timeline and `DataLoadPlan.md` for data inde
 | Kaggle API key | Can't download Kaggle datasets | Set up `~/.kaggle/kaggle.json` | ✅ Resolved |
 | HF gated dataset access | Can't download InJudgements dataset | Request access on HuggingFace | ⬜ Pending |
 | Anthropic API key | Can't test RAG chain | Sign up at console.anthropic.com | ⬜ Pending |
-| Sarvam AI API key | Can't do Hindi translation | Sign up at sarvam.ai | ⬜ Pending |
+| Sarvam AI API key | Can't do Hindi translation | Sign up at sarvam.ai | ⏸️ Deferred (English only for launch) |
 | API keys (Indian Kanoon, kanoon.dev) | Can't use structured APIs | Sign up at respective URLs | ⬜ Deferred to post-launch |

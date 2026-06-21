@@ -1,29 +1,16 @@
-# ── Data Collection & Scraping ──
-scrapy>=2.11
-playwright>=1.40
-requests>=2.31
-beautifulsoup4>=4.12
-lxml>=5.1
+# ── Data Ingestion & Processing ──
+pandas>=2.1
+pyarrow>=15.0         # Parquet file support
+tiktoken>=0.6         # Token counting for chunk validation
 
-# ── PDF & Document Parsing ──
-PyMuPDF>=1.23
-unstructured[pdf]>=0.12
-pytesseract>=0.3.10
-PyPDF2>=3.0
-
-# ── Datasets ──
-datasets>=2.16        # HuggingFace datasets
-kaggle>=1.6           # Kaggle API
-
-# ── Embeddings & Vector DB ──
+# ── Embeddings & Vector Search ──
 sentence-transformers>=2.3
-qdrant-client>=1.7
 torch>=2.1
+faiss-cpu>=1.7        # In-memory vector index
+rank-bm25>=0.2.2      # BM25 sparse keyword index
+numpy>=1.26
 
-# ── RAG Orchestration ──
-langchain>=0.1
-langchain-community>=0.0.10
-llama-index>=0.10
+# ── LLM (query time only) ──
 anthropic>=0.18       # Claude API
 
 # ── Backend ──
@@ -37,6 +24,12 @@ supabase>=2.3
 # ── Utilities ──
 python-dotenv>=1.0
 tqdm>=4.66
-schedule>=1.2
 loguru>=0.7
-pandas>=2.1
+
+# ── Deferred (uncomment when needed) ──
+# scrapy>=2.11          # Web scraping (Week 5)
+# playwright>=1.40      # Browser automation for scraping
+# PyMuPDF>=1.23         # PDF parsing (when adding Kaggle PDFs)
+# pytesseract>=0.3.10   # OCR for scanned PDFs
+# datasets>=2.16        # HuggingFace datasets API
+# kaggle>=1.6           # Kaggle API
