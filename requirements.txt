@@ -11,7 +11,8 @@ rank-bm25>=0.2.2      # BM25 sparse keyword index
 numpy>=1.26
 
 # ── LLM (query time only) ──
-anthropic>=0.18       # Claude API
+openai>=1.0           # Groq generation via OpenAI-compatible API
+anthropic>=0.18       # Claude API (unused; Groq is the active provider)
 
 # ── Backend ──
 fastapi>=0.109

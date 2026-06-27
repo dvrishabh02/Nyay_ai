@@ -86,9 +86,15 @@ class ParquetParser:
         return max(avg_lengths, key=avg_lengths.get)
 
     def _detect_title_column(self, df: pd.DataFrame) -> Optional[str]:
-        """Auto-detect a title/name column if present."""
-        title_candidates = ["title", "name", "act_name", "case_name", "heading"]
-        for col in title_candidates:
-            if col in df.columns:
-                return col
+        """Auto-detect a title/name column if present (case/space-insensitive)."""
+        title_candidates = [
+            "short title", "title", "short_title", "name",
+            "act_name", "case_name", "heading",
+        ]
+        # Normalize actual columns: lowercased, underscores/spaces unified
+        normalized = {col.lower().replace("_", " ").strip(): col for col in df.columns}
+        for cand in title_candidates:
+            key = cand.replace("_", " ").strip()
+            if key in normalized:
+                return normalized[key]
         return None
