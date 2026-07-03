@@ -14,8 +14,7 @@ class QueryRequest(BaseModel):
     )
 
 
-class CitationModel(BaseModel):
-    n: int
+class SourceModel(BaseModel):
     title: str
     source: str
     doc_type: str
@@ -25,5 +24,5 @@ class QueryResponse(BaseModel):
     question: str
     answer: str
     confidence: str
-    citations: list[CitationModel]
+    sources: list[SourceModel]
     latency_ms: int
