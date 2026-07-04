@@ -167,6 +167,38 @@ seconds to under a minute).
 To redeploy after backend code changes: re-run `scripts/prepare_hf_space.sh`, then
 `cd dist/hf-space && git add -A && git commit -m "Update" && git push space main`.
 
+#### Adding new files/data to the deployed backend
+
+`scripts/prepare_hf_space.sh` only copies a fixed, curated list of paths into
+`dist/hf-space/` — it does **not** mirror the whole repo (deliberately, to avoid
+dragging the multi-GB raw corpus into the Space). Right now it copies:
+
+```bash
+cp -r "$ROOT/api" "$OUT_DIR/api"
+cp -r "$ROOT/rag" "$OUT_DIR/rag"
+cp -r "$ROOT/ingestion" "$OUT_DIR/ingestion"
+cp "$ROOT"/data/index/*.faiss "$ROOT"/data/index/*.pkl "$ROOT"/data/index/manifest.json "$OUT_DIR/data/index/"
+cp "$ROOT/requirements.txt" "$OUT_DIR/requirements.txt"
+```
+
+If backend code you add lives inside `api/`, `rag/`, or `ingestion/`, or you
+rebuild the existing `data/index/*.faiss`/`*.pkl`/`manifest.json` files in place,
+**no script changes are needed** — just re-run the script, it'll pick up the new
+content automatically.
+
+If you add a genuinely new top-level path the backend needs at runtime (a new
+package, a new data file outside `data/index/`, etc.), add one more line to the
+script, e.g.:
+
+```bash
+cp -r "$ROOT/some_new_module" "$OUT_DIR/some_new_module"
+```
+
+Then make sure `deploy/Dockerfile` actually `COPY`s that path into the image too
+(it currently only copies `api/`, `rag/`, `ingestion/`, and `data/index/`), and
+that anything it imports is in `requirements.txt`. Re-run the script and redeploy
+as above.
+
 ### B. Frontend → Vercel
 
 1. Push this repo to GitHub if it isn't already there (Vercel's import flow reads
