@@ -43,3 +43,14 @@ temp/
 
 # Claude Code local settings
 .claude/settings.local.json
+
+# Frontend (Next.js)
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/.env*.local
+frontend/.vercel
+frontend/*.tsbuildinfo
+
+# Backend deploy export (scripts/prepare_hf_space.sh output)
+dist/
